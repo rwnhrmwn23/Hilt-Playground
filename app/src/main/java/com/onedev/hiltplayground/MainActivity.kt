@@ -2,50 +2,50 @@ package com.onedev.hiltplayground
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
+import com.google.gson.Gson
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.scopes.ActivityScoped
+import dagger.hilt.components.SingletonComponent
 import javax.inject.Inject
+import javax.inject.Singleton
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    // Field Injection
     @Inject
-    lateinit var someClass: SomeClass
+    lateinit var someClass: SomeClass2
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         println(someClass.doAThing())
-        println(someClass.doSomeOtherThing())
     }
 }
 
-@AndroidEntryPoint
-class MyFragment : Fragment() {
-    @Inject
-    lateinit var someClass: SomeClass
-}
-
-@ActivityScoped
-class SomeClass
+class SomeClass2
 @Inject
-constructor(private val someOtherClass: SomeOtherClass) {
+constructor(
+    private val someInterface: SomeInterface,
+    private val gson: Gson
+) {
     fun doAThing(): String {
-        return "Look I did a Thing!"
-    }
-
-    fun doSomeOtherThing(): String {
-        return someOtherClass.doSomeOtherThing()
+        return "Look I Got : ${someInterface.getAThing()}"
     }
 }
 
-class SomeOtherClass
+class SomeInterfaceImpl
 @Inject
-constructor() {
-    fun doSomeOtherThing(): String {
-        return "Look I did a Other Thing!"
+constructor(
+    private val text: String
+) : SomeInterface {
+    override fun getAThing(): String {
+        return "A Thing $text"
     }
+}
+
+interface SomeInterface {
+    fun getAThing(): String
 }
