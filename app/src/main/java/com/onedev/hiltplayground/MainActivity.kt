@@ -2,7 +2,9 @@ package com.onedev.hiltplayground
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.scopes.ActivityScoped
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -21,6 +23,13 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
+@AndroidEntryPoint
+class MyFragment : Fragment() {
+    @Inject
+    lateinit var someClass: SomeClass
+}
+
+@ActivityScoped
 class SomeClass
 @Inject
 constructor(private val someOtherClass: SomeOtherClass) {
